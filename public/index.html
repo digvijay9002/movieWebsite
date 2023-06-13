@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MovieDB</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM"
+      crossorigin="anonymous"
+    />
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="./css/style.css" />
+  </head>
+  <body>
+    <div id="root">
+      <header class="header" id="navbar">
+        <div class="left-navbar">
+          <a class="logo" href="/"
+            ><img src="./image/TMDB_logo.svg" alt="TMDB Logo"
+          /></a>
+          <ul class="navbar">
+            <li class="dropdown-movies">
+              <a href="#">Movies</a>
+              <div class="dropdown-menu">
+                <a class="nav-a" href="/movie">Popular</a
+                ><a class="nav-a" href="/movie/now-playing">Now Playing</a
+                ><a class="nav-a" href="/movie/upcoming">Upcoming</a
+                ><a class="nav-a" href="/movie/top-rated">Top Rated</a>
+              </div>
+            </li>
+            <li class="dropdown-tvshow">
+              <a href="#">TV Shows</a>
+              <div class="dropdown-menu-tv">
+                <a class="nav-a" href="/tv">Popular</a
+                ><a class="nav-a" href="/tv/airing-today">Airing Today</a
+                ><a class="nav-a" href="/tv/on-tv">On TV</a
+                ><a class="nav-a" href="/tv/top-rated">Top Rated</a>
+              </div>
+            </li>
+            <li class="dropdown-movies">
+              <a href="#">People</a>
+              <div class="dropdown-menu">
+                <a class="nav-a" href="/people/popularPeople">Popular People</a> 
+              </div>
+            </li>
+            <li class="dropdown-movies">
+              <a href="#">More</a>
+              <div class="dropdown-menu">
+                <a class="nav-a" href="/more/Discussion">Discussion</a>
+                <a class="nav-a" href="/more/Leaderboard">Leaderboard</a> 
+                <a class="nav-a" href="/more/Support">Support</a> 
+                <a class="nav-a" href="/more/API">API</a> 
+
+              </div>
+            </li>
+          </ul>
+        </div>
+        <div class="right-navbar">
+          <ul class="">
+            <li class="add-Icon">
+              <a href="#"><img src="./image/plus.svg" alt="Add Icon" /></a>
+            </li>
+            <li><div class="translate-lan">EN</div></li>
+
+            <li class="add-Icon">
+              <a href="#"
+                ><img
+                  src="./image/notification icon.svg"
+                  alt="Add Icon"
+                  style="filter: invert()"
+              /></a>
+            </li>
+            <li><a href="#">Login</a></li>
+
+            <li>
+              <a href="#"
+                ><img src="./image/search icon.svg"" alt="Search Icon"
+                class="search-icon" /></a
+              >
+            </li>
+          </ul>
+        </div>
+      </header>
+
+      <div class="container">
+        <section>
+          <div class="hero-div">
+            <div class="title-div">
+              <h2>Welcome.</h2>
+              <h3>
+                Millions of movies, TV shows and people to discover. Explore
+                now.
+              </h3>
+            </div>
+            <div class="search-div">
+              <form action="#">
+                <input
+                  class="search-input"
+                  type="text"
+                  placeholder="Search for a movie, tv show, person......"
+                /><input class="submit-input" type="submit" value="Search" />
+              </form>
+            </div>
+          </div>
+
+          <div class="trending-div">
+            <div class="trending-title-div">
+              <h2>Trending</h2>
+              <div class="trending-selector">
+                <h3 class="active-trending" id="today">
+                  <a class="active-link">Today</a>
+                </h3>
+                <h3 class="false" id="thisWeek"><a class="false">This Week</a></h3>
+              </div>
+            </div>
+
+            <div class="trending-movies-container should-fade is-fading">
+              <div class="trending-movie" id="trending-movie"></div>
+            </div>
+
+            
+            <div class="popular-div">
+              <div class="trending-title-div">
+                <h2>What's Popular</h2>
+                <div class="trending-selector">
+                  <h3 class="active-trending" id="popularOnTv">
+                    <a class="active-link">On TV</a>
+                  </h3>
+                  <h3 class="false" id="inTheaters">
+                    <a class="false">In Theaters</a>
+                  </h3>
+                </div>
+              </div>
+  
+              <div class="trending-movies-container should-fade is-fading">
+                <div class="trending-movie" id="popular-movie"></div>
+
+        
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+      <div class="footer">
+        <div class="logo-div mr">
+          <img src="./image/footer_logo.svg" alt="TMDB Logo" class="tmdb-footer-logo">
+              <a href="#">JOIN THE COMMUNITY</a>
+        </div>
+        
+        <div class="info-div mr">
+          <h3>THE BASICS</h3>
+          <ul><li><a href="#">About TMDB</a></li>
+            <li><a href="#">Contact Us</a></li>
+            <li><a href="#">Support Forums</a></li>
+            <li><a href="#">API</a></li>
+            <li><a href="#">System Status</a></li>
+          </ul>
+        </div>
+          <div class="info-div mr">
+            <h3>GET INVOLVED</h3>
+            <ul><li><a href="#">Contribution Bible</a></li>
+              <li><a href="#">Add New Movie</a></li>
+              <li><a href="#">Add New TV Show</a>
+              </li></ul>
+            </div>
+            
+            <div class="info-div mr">
+              <h3>Community</h3>
+              <ul><li><a href="#">Guidelines</a></li>
+                <li><a href="#">Discussions</a></li>
+                <li><a href="#">Leaderboard</a></li>
+                <li><a href="#">Twitter</a></li></ul>
+              </div>
+              
+              <div class="info-div">
+                <h3>LEGAL</h3>
+                <ul><li><a href="#">Terms of Use</a></li>
+                  <li><a href="#">API Terms of Use</a></li>
+                  <li><a href="#">Privacy Policy</a></li></ul>
+                </div>
+              </div>
+
+      
+   
+    <script src="./js/index.js"></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+      crossorigin="anonymous"
+    ></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+      AOS.init();
+    </script>
+  </body>
+</html>
