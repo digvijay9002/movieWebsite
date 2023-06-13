@@ -64,14 +64,11 @@ function popularNow(url, title, date) {
           "beforeend",
           `
             <div class="single-movie" data-aos="fade"  data-aos-delay="500">
-              <a>
-                  <div class="movie-img-div">
+              <a class="movie-img-div" href="#link">
                 <img loading="lazy" class="movie-img" src='https://www.themoviedb.org/t/p/w220_and_h330_face${
                   results[index].poster_path
                 }'>
-                
               </a>
-            </div>
            
             <div class="movie-content-div"> 
                  
@@ -172,14 +169,13 @@ function trending(type) {
           "beforeend",
           `
           <div class="single-movie" data-aos="fade"  data-aos-delay="600" >
-            <a>
-                <div class="movie-img-div">
+            <a class="movie-img-div" href ="./details.html?id=${
+              results[index].id
+            }">
               <img loading="lazy" class="movie-img" src='https://www.themoviedb.org/t/p/w220_and_h330_face${
                 results[index].poster_path
               }'>
-              
             </a>
-          </div>
          
           <div class="movie-content-div"> 
                
@@ -192,7 +188,9 @@ function trending(type) {
                     </div>
               </div> 
                
-                <a class="hover-moviename">${results[index].original_title}</a>
+                <a class="hover-moviename" href ="./details.html?id=${
+                  results[index].id
+                }">${results[index].original_title}</a>
                 <p>${new Date(results[index].release_date).toLocaleDateString(
                   "en-us",
                   {
@@ -221,3 +219,16 @@ function scrollFunction() {
     document.getElementById("navbar").style.top = "0px";
   }
 }
+
+/////////////////////////////////////////////////chart /////////////////////////////
+const ctx = document.getElementById('myChart');
+
+new Chart(ctx, {
+  type: 'doughnut',
+  data: {
+    datasets: [{
+      data: [75, 25],
+      borderWidth: 0
+    }]
+  }
+});

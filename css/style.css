@@ -437,6 +437,11 @@ a.active-link {
   pointer-events: none;
 }
 
+.movie-img-div {
+  display: flex;
+  height: auto;
+  cursor: pointer;
+}
 .single-movie {
   margin-right: 1.5rem;
   width: 150px;
