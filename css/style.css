@@ -472,7 +472,7 @@ a.active-link {
   /* box-shadow: inset 0 0 50px #000; */
   background: black;
   z-index: 1000;
-  padding: .5px;
+  padding: 0.5px;
 }
 
 .votes .percent .number {
@@ -489,8 +489,9 @@ a.active-link {
 
 .votes .percent .number span {
   color: white;
-  font-weight: 700;
-  /* font-size: 40px; */
+  font-weight: 500;
+  font-size: 14px;
+  text-align: center;
 }
 
 .votes .percent .number span span {
@@ -528,7 +529,7 @@ a.active-link {
   stroke: #1d4028;
   stroke-width: 2;
   stroke-linecap: round;
-  transform: translate(3px,2px);
+  transform: translate(3px, 2px);
   stroke-dasharray: 100;
   stroke-dashoffset: 100;
 }
