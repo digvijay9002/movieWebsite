@@ -1,11 +1,124 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-</head>
-<body>
-    <script src="./js/details.js"></script>
-</body>
+    <style>
+      @import url(https://fonts.google.com/css?family=Roboto:300,300,500,600,700,800,900);
+
+      * {
+        margin: 0;
+        padding: 0;
+        font-family: "Roboto", sans-serif;
+      }
+
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        background: white;
+      }
+
+      .votes .percent {
+        position: relative;
+        width: 38px;
+        height: 38px;
+        border-radius: 50%;
+        /* box-shadow: inset 0 0 50px #000; */
+        background: black;
+        z-index: 1000;
+        padding: 1px;
+      }
+
+      .votes .percent .number {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 50%;
+      }
+
+      .votes .percent .number span {
+        color: white;
+        font-weight: 700;
+        /* font-size: 40px; */
+      }
+
+      .votes .percent .number span span {
+        /* font-size: 24px; */
+        color: white;
+      }
+
+      .votes .text {
+        position: relative;
+        color: #1d4028;
+        margin-top: 20px;
+        font-weight: 700;
+        font-size: 18px;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        /* transition: 0.5s; */
+      }
+
+      .votes:hover .text {
+        color: #fff;
+      }
+
+      .votes svg {
+        rotate: -90deg;
+        position: relative;
+        width: 38px;
+        height: 38px;
+        z-index: 1000;
+      }
+
+      .votes svg circle {
+        width: 100%;
+        height: 100%;
+        fill: none;
+        stroke: #1d4028;
+        stroke-width: 2;
+        stroke-linecap: round;
+        transform: translate(1px, 1px);
+        stroke-dasharray: 100;
+        stroke-dashoffset: 100;
+      }
+
+      /* .votes svg circle {
+        stroke-dashoffset: calc(440 - (440 * 75) / 100);
+        stroke: #21d07a;
+      } */
+    </style>
+  </head>
+  <body>
+    <!-- <div class="votes">
+      <div class="percent">
+        <svg>
+          <circle cx="18" cy="18" r="18" style="stroke-dashoffset: 0; stroke: #1d4028;"></circle>
+          <circle cx="18" cy="18" r="18"></circle>
+        </svg>
+        <div class="number">
+          <span>85<span>%</span></span>
+        </div>
+      </div>
+    </div> -->
+    <div class="votes">
+        <div class="percent">
+          <svg>
+            <circle cx="18" cy="18" r="18" style="stroke-dashoffset: 0; stroke: #1d4028;"></circle>
+            <circle cx="18" cy="18" r="18" style="stroke-dashoffset: 25; stroke: #21d07a;"></circle>
+          </svg>
+          <div class="number">
+            <span>75<sup>%</sup></span>
+          </div>
+        </div>
+      </div>
+    <!-- <script src="./js/details.js"></script> -->
+  </body>
 </html>
