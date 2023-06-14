@@ -1,7 +1,5 @@
 {
   "projects": {
     "default": "moviewebsite-8c102"
-  },
-  "targets": {},
-  "etags": {}
+  }
 }
