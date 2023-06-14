@@ -60,6 +60,9 @@ function popularNow(url, title, date) {
 
       posters.innerHTML = "";
       for (const index in results) {
+
+        let percentage = Math.round(results[index].vote_average * 10);
+        let alertColor = percentage > 70 ? "#21d07a" : percentage > 40 ? "yellow" : "red";
         posters.insertAdjacentHTML(
           "beforeend",
           `
@@ -72,14 +75,20 @@ function popularNow(url, title, date) {
            
             <div class="movie-content-div"> 
                  
-                <div class="circular-div">
-                    <div class="vote">
-                        <span>${Math.round(
-                          results[index].vote_average * 10
-                        )}<sup>%</sup>
-                          </span>
-                      </div>
-                </div> 
+            <div class="votes">
+            <div class="percent">
+              <svg>
+                <circle cx="16" cy="16" r="16" style="stroke-dashoffset: 0; stroke: #1d4028;"></circle>
+                <circle cx="16" cy="16" r="16" style="stroke-dashoffset: ${100 - percentage}; stroke: ${alertColor};"></circle>
+              </svg>
+              <div class="number">
+                <span>${Math.round(
+                  results[index].vote_average * 10
+                )}<sup>%</sup></span>
+              </div>
+            </div>
+          </div>
+           
                  
                   <a class="hover-moviename">${results[index][title]}</a>
                   <p>${new Date(results[index][date]).toLocaleDateString(
@@ -92,6 +101,7 @@ function popularNow(url, title, date) {
                   )}</p>
             </div>
             </div>
+            </div> 
           `
         );
       }
@@ -164,7 +174,26 @@ function trending(type) {
         })
       );
       posters.innerHTML = "";
+      console.log(`stroke-dashoffset: ${results[0].vote_average}`);
+      console.log(
+        `stroke-dashoffset: ${Math.round(results[0].vote_average * 10)}`
+      );
+      console.log(
+        `stroke-dashoffset: ${440 * Math.round(results[0].vote_average * 10)}`
+      );
+      console.log(
+        `stroke-dashoffset: ${
+          440 - 440 * Math.round(results[0].vote_average * 10)
+        }`
+      );
+      console.log(
+        `stroke-dashoffset: ${
+          440 - (440 * Math.round(results[0].vote_average * 10)) / 100
+        }`
+      );
       for (const index in results) {
+        let percentage = Math.round(results[index].vote_average * 10);
+        let alertColor = percentage > 70 ? "#21d07a" : percentage > 40 ? "yellow" : "red";
         posters.insertAdjacentHTML(
           "beforeend",
           `
@@ -177,16 +206,24 @@ function trending(type) {
               }'>
             </a>
          
-          <div class="movie-content-div"> 
+          <div class="movie-content-div">
                
-              <div class="circular-div">
-                  <div class="vote">
-                      <span>${Math.round(
-                        results[index].vote_average * 10
-                      )}<sup>%</sup>
-                        </span>
-                    </div>
-              </div> 
+          <div class="votes">
+            <div class="percent">
+              <svg>
+                <circle cx="16" cy="16" r="16" style="stroke-dashoffset: 0; stroke: #1d4028;"></circle>
+                <circle cx="16" cy="16" r="16" style="stroke-dashoffset: ${
+                  100 - percentage
+                }; stroke: ${alertColor};"></circle>
+              </svg>
+              <div class="number">
+                <span>${Math.round(
+                  results[index].vote_average * 10
+                )}<sup>%</sup></span>
+              </div>
+            </div>
+          </div>
+                  
                
                 <a class="hover-moviename" href ="./details.html?id=${
                   results[index].id
@@ -219,16 +256,3 @@ function scrollFunction() {
     document.getElementById("navbar").style.top = "0px";
   }
 }
-
-/////////////////////////////////////////////////chart /////////////////////////////
-const ctx = document.getElementById('myChart');
-
-new Chart(ctx, {
-  type: 'doughnut',
-  data: {
-    datasets: [{
-      data: [75, 25],
-      borderWidth: 0
-    }]
-  }
-});
