@@ -13,7 +13,7 @@ const getDetails = {
   },
 };
 
-fetch(`https://api.themoviedb.org/3/movie/${id}?language=en-US'`, getDetails)
+fetch(`https://api.themoviedb.org/3/tv/${id}?language=en-US`, getDetails)
   .then((response) => response.json())
   .then((details) => {
     console.log(details);
@@ -34,13 +34,13 @@ fetch(`https://api.themoviedb.org/3/movie/${id}?language=en-US'`, getDetails)
     }
     document.getElementById("genres").innerHTML = totalgenres.join(", ");
 
-    document.getElementById("movie-name").innerHTML = details.title;
+    document.getElementById("movie-name").innerHTML = details.name;
 
     //release year
 
     document.getElementById("release-year").innerHTML =
       "(" +
-      new Date(details.release_date).toLocaleDateString("en-us", {
+      new Date(details.first_air_date).toLocaleDateString("en-us", {
         year: "numeric",
       }) +
       ")";
@@ -48,7 +48,7 @@ fetch(`https://api.themoviedb.org/3/movie/${id}?language=en-US'`, getDetails)
     //release date
 
     document.getElementById("release-date").innerHTML = new Date(
-      details.release_date
+      details.first_air_date
     ).toLocaleDateString("en-us", {
       day: "numeric",
       month: "numeric",
@@ -56,16 +56,20 @@ fetch(`https://api.themoviedb.org/3/movie/${id}?language=en-US'`, getDetails)
     });
 
     //Movie Duration
-    let totalTime = details.runtime;
-    toHoursAndMinutes(totalTime);
+    if (details.episode_run_time == 0) {
+      document.getElementById("movie-duration").style.display = "none";
+    } else {
+      let totalTime = details.episode_run_time;
+      toHoursAndMinutes(totalTime);
 
-    function toHoursAndMinutes(totalTime) {
-      const hours = Math.floor(totalTime / 60);
-      const minutes = totalTime % 60;
+      function toHoursAndMinutes(totalTime) {
+        const hours = Math.floor(totalTime / 60);
+        const minutes = totalTime % 60;
 
-      document.getElementById(
-        "movie-duration"
-      ).innerHTML = `${hours}h ${minutes}m`;
+        document.getElementById(
+          "movie-duration"
+        ).innerHTML = `${hours}h ${minutes}m`;
+      }
     }
 
     //arrow function
@@ -118,46 +122,17 @@ fetch(`https://api.themoviedb.org/3/movie/${id}?language=en-US'`, getDetails)
         progressValue++;
         valueContainer.textContent = `${progressValue}%`;
         progressBar.style.background = `conic-gradient(
-        ${alertColor} ${progressValue * 3.6}deg,
-        #1D403C ${progressValue * 3.6}deg
-        )`;
+     ${alertColor} ${progressValue * 3.6}deg,
+     #1D403C ${progressValue * 3.6}deg
+  )`;
         if (progressValue == progressEndValue) {
           clearInterval(progress);
         }
       }, speed);
     }
   })
+
   .catch((err) => console.error("Movie: " + err));
-
-// Get the modal
-var modal = document.getElementById("myModal");
-
-// Get the button that opens the modal
-var btn = document.getElementById("myBtn");
-
-// Get the <span> element that closes the modal
-var span = document.getElementsByClassName("close")[0];
-
-// When the user clicks the button, open the modal
-btn.onclick = function () {
-  modal.style.display = "block";
-  // document.getElementById("iframe").get(0).stopVideo();;
-};
-
-// When the user clicks on <span> (x), close the modal
-span.onclick = function () {
-  modal.style.display = "none";
-};
-
-// When the user clicks anywhere outside of the modal, close it
-window.onclick = function (event) {
-  if (event.target == modal) {
-    modal.style.display = "none";
-    // document.getElementById("iframe").get(0).stopVideo();
-    console.log(document.getElementById("iframe").getAttribute());
-    // console.log(document.getElementById("iframe"));
-  }
-};
 //Trailers/////////////////////////////////
 const options = {
   method: "GET",
@@ -168,11 +143,15 @@ const options = {
   },
 };
 
-fetch(`https://api.themoviedb.org/3/movie/${id}/videos?language=en-US`, options)
+fetch(`https://api.themoviedb.org/3/tv/${id}/videos?language=en-US`, options)
   .then((response) => response.json())
   .then((videos) => {
     console.log(videos);
     var iframe = document.getElementById("iframe");
+
+    // if (videos.results.length == 0) {
+    //   document.getElementById("title").display = "none";
+    // }
 
     var videoURL = "";
     var flag = true;
@@ -181,6 +160,8 @@ fetch(`https://api.themoviedb.org/3/movie/${id}/videos?language=en-US`, options)
         videoURL = "https://www.youtube.com/embed/" + obj.key;
         flag = false;
       }
+
+      console.log(videoURL);
     });
 
     // Set the src attribute of the iframe with the dynamic video URL
@@ -220,8 +201,34 @@ fetch(`https://api.themoviedb.org/3/movie/${id}/videos?language=en-US`, options)
   })
   .catch((err) => console.error(err));
 
-const maxDisplayedCast = 13; // Maximum number of cast members to display initially
-let castCount = 0; // Counter variable to track the number of displayed cast members
+var modal = document.getElementById("myModal");
+
+// Get the button that opens the modal
+var btn = document.getElementById("myBtn");
+
+// Get the <span> element that closes the modal
+var span = document.getElementsByClassName("close")[0];
+
+// When the user clicks the button, open the modal
+btn.onclick = function () {
+  modal.style.display = "block";
+  // document.getElementById("iframe").get(0).stopVideo();;
+};
+
+// When the user clicks on <span> (x), close the modal
+span.onclick = function () {
+  modal.style.display = "none";
+};
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function (event) {
+  if (event.target == modal) {
+    modal.style.display = "none";
+    // document.getElementById("iframe").get(0).stopVideo();
+    console.log(document.getElementById("iframe").getAttribute());
+    // console.log(document.getElementById("iframe"));
+  }
+};
 
 const credits = {
   method: "GET",
@@ -232,79 +239,35 @@ const credits = {
   },
 };
 
-fetch(
-  `https://api.themoviedb.org/3/movie/385687/credits?language=en-US`,
-  credits
-)
+fetch(`https://api.themoviedb.org/3/tv/${id}/credits?language=en-US`, credits)
   .then((response) => response.json())
   .then((movieCredits) => {
     console.log(movieCredits);
 
-    let castScroller = document.getElementById("cast-scroller-div");
+    let cast_scroller = document.getElementById("cast-scroller-div");
 
     var movieCast = movieCredits.cast;
+    console.log("Hii", movieCast);
 
     for (const index in movieCast) {
-      if (castCount < maxDisplayedCast) {
-        castScroller.insertAdjacentHTML(
-          "beforeend",
-          `
-          <div class="single-cast-card">
-            <div class="cast-img-div">
-              ${
-                movieCast[index].profile_path
-                  ? `<img src="https://www.themoviedb.org/t/p/w138_and_h175_face${movieCast[index].profile_path}" alt="cast Image" />`
-                  : `<img src="image/person_image.svg" alt="cast Image" />`
-              }
-            </div>
-            <p class="cast-original-name">${movieCast[index].name}</p>
-            <p class="cast-character-name">${movieCast[index].character}</p>
-          </div>
-        `
-        );
-
-        castCount++;
-      } else {
-        break; // Stop looping once the maximum number of cast members has been displayed
-      }
-    }
-
-    if (castCount < movieCast.length) {
-      castScroller.insertAdjacentHTML(
+      cast_scroller.insertAdjacentHTML(
         "beforeend",
+
         `
-        <button id="view-more-button">View More</button>
+      <div class="single-cast-card">
+      <div class="cast-img-div">
+      ${
+        movieCast[index].profile_path
+          ? `<img src="https://www.themoviedb.org/t/p/w138_and_h175_face${movieCast[index].profile_path}" alt="cast Image" />`
+          : `<img src="image/person_image.svg" alt="cast Image" />`
+      }
+      </div>
+      <p class="cast-original-name">${movieCast[index].name}</p>
+      <p class="cast-character-name">${movieCast[index].character}</p>
+    </div>
+      
       `
       );
-
-      document.getElementById("view-more-button").onclick = () => {
-        showAllCast(movieCast);
-      };
     }
   })
   .catch((err) => console.error(err));
-
-function showAllCast(movieCast) {
-  const viewMoreButton = document.getElementById("view-more-button");
-  viewMoreButton.style.display = "none"; // Hide the "View More" button
-
-  for (const index in movieCast) {
-    let castScroller = document.getElementById("cast-scroller-div");
-    castScroller.insertAdjacentHTML(
-      "beforeend",
-      `
-          <div class="single-cast-card">
-            <div class="cast-img-div">
-              ${
-                movieCast[index].profile_path
-                  ? `<img src="https://www.themoviedb.org/t/p/w138_and_h175_face${movieCast[index].profile_path}" alt="cast Image" />`
-                  : `<img src="image/person_image.svg" alt="cast Image" />`
-              }
-            </div>
-            <p class="cast-original-name">${movieCast[index].name}</p>
-            <p class="cast-character-name">${movieCast[index].character}</p>
-          </div>
-        `
-    );
-  } // Replace the content of castScroller with the updated HTML
-}

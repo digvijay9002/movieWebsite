@@ -4,6 +4,7 @@ let inTheaters = document.getElementById("inTheaters");
 popularOnTv.addEventListener("click", () => {
   popularNow(
     "https://api.themoviedb.org/3/tv/airing_today?language=en-US&page=1'",
+    "tv",
     "name",
     "first_air_date"
   );
@@ -20,6 +21,7 @@ popularOnTv.addEventListener("click", () => {
 inTheaters.addEventListener("click", () => {
   popularNow(
     "https://api.themoviedb.org/3/movie/now_playing?language=en-US&page=1'",
+    "movie",
     "title",
     "release_date"
   );
@@ -33,7 +35,7 @@ inTheaters.addEventListener("click", () => {
   popularOnTv.children[0].classList.add("false");
 });
 
-function popularNow(url, title, date) {
+function popularNow(url, mediaType, title, date) {
   const popularOnTv = {
     method: "GET",
     headers: {
@@ -47,7 +49,7 @@ function popularNow(url, title, date) {
     .then((response) => response.json())
     .then((response) => {
       let posters = document.getElementById("popular-movie");
-      console.log(response);
+      console.log("DC", response);
 
       let results = response.results;
       console.log(
@@ -59,19 +61,25 @@ function popularNow(url, title, date) {
       );
 
       posters.innerHTML = "";
-      for (const index in results) {
 
-        let percentage = Math.round(results[index].vote_average * 10);
-        let alertColor = percentage > 70 ? "#21d07a" : percentage > 40 ? "yellow" : "red";
-        posters.insertAdjacentHTML(
-          "beforeend",
-          `
+      if (response.results == 0) {
+        document.getElementById("vote-span").innerHTML = "NA";
+      } else {
+        for (const index in results) {
+          let percentage = Math.round(results[index].vote_average * 10);
+          let alertColor =
+            percentage > 70 ? "#21d07a" : percentage > 40 ? "yellow" : "red";
+          posters.insertAdjacentHTML(
+            "beforeend",
+            `
             <div class="single-movie" data-aos="fade"  data-aos-delay="500">
-              <a class="movie-img-div" href="#link">
+              <a class="movie-img-div" href ="./${mediaType}Details.html?id=${
+              results[index].id
+            }">
                 <img loading="lazy" class="movie-img" src='https://www.themoviedb.org/t/p/w220_and_h330_face${
                   results[index].poster_path
                 }'>
-              </a>
+         
            
             <div class="movie-content-div"> 
                  
@@ -79,18 +87,25 @@ function popularNow(url, title, date) {
             <div class="percent">
               <svg>
                 <circle cx="16" cy="16" r="16" style="stroke-dashoffset: 0; stroke: #1d4028;"></circle>
-                <circle cx="16" cy="16" r="16" style="stroke-dashoffset: ${100 - percentage}; stroke: ${alertColor};"></circle>
+                <circle cx="16" cy="16" r="16" style="stroke-dashoffset: ${
+                  100 - percentage
+                }; stroke: ${alertColor};"></circle>
               </svg>
               <div class="number">
-                <span>${Math.round(
+                <span id="vote-span">${Math.round(
                   results[index].vote_average * 10
                 )}<sup>%</sup></span>
               </div>
             </div>
           </div>
            
+                  
                  
-                  <a class="hover-moviename">${results[index][title]}</a>
+                  <a class="hover-moviename" href ="./${mediaType}Details.html?id=${
+              results[index].id
+            }">
+                    ${results[index][title]}
+                  </a>
                   <p>${new Date(results[index][date]).toLocaleDateString(
                     "en-us",
                     {
@@ -103,7 +118,8 @@ function popularNow(url, title, date) {
             </div>
             </div> 
           `
-        );
+          );
+        }
       }
     })
     .catch((err) => console.error(err));
@@ -111,6 +127,7 @@ function popularNow(url, title, date) {
 
 popularNow(
   "https://api.themoviedb.org/3/tv/airing_today?language=en-US&page=1'",
+  "tv",
   "name",
   "first_air_date"
 );
@@ -163,6 +180,7 @@ function trending(type) {
     .then((response) => response.json())
     .then((response) => {
       let posters = document.getElementById("trending-movie");
+
       console.log(response);
 
       let results = response.results;
@@ -174,31 +192,17 @@ function trending(type) {
         })
       );
       posters.innerHTML = "";
-      console.log(`stroke-dashoffset: ${results[0].vote_average}`);
-      console.log(
-        `stroke-dashoffset: ${Math.round(results[0].vote_average * 10)}`
-      );
-      console.log(
-        `stroke-dashoffset: ${440 * Math.round(results[0].vote_average * 10)}`
-      );
-      console.log(
-        `stroke-dashoffset: ${
-          440 - 440 * Math.round(results[0].vote_average * 10)
-        }`
-      );
-      console.log(
-        `stroke-dashoffset: ${
-          440 - (440 * Math.round(results[0].vote_average * 10)) / 100
-        }`
-      );
+
       for (const index in results) {
         let percentage = Math.round(results[index].vote_average * 10);
-        let alertColor = percentage > 70 ? "#21d07a" : percentage > 40 ? "yellow" : "red";
+        let alertColor =
+          percentage > 70 ? "#21d07a" : percentage > 40 ? "yellow" : "red";
         posters.insertAdjacentHTML(
           "beforeend",
           `
+          
           <div class="single-movie" data-aos="fade"  data-aos-delay="600" >
-            <a class="movie-img-div" href ="./details.html?id=${
+            <a class="movie-img-div" href ="./movieDetails.html?id=${
               results[index].id
             }">
               <img loading="lazy" class="movie-img" src='https://www.themoviedb.org/t/p/w220_and_h330_face${
@@ -208,24 +212,24 @@ function trending(type) {
          
           <div class="movie-content-div">
                
-          <div class="votes">
-            <div class="percent">
-              <svg>
-                <circle cx="16" cy="16" r="16" style="stroke-dashoffset: 0; stroke: #1d4028;"></circle>
-                <circle cx="16" cy="16" r="16" style="stroke-dashoffset: ${
-                  100 - percentage
-                }; stroke: ${alertColor};"></circle>
-              </svg>
-              <div class="number">
-                <span>${Math.round(
-                  results[index].vote_average * 10
-                )}<sup>%</sup></span>
+            <div class="votes">
+              <div class="percent">
+                <svg>
+                  <circle cx="16" cy="16" r="16" style="stroke-dashoffset: 0; stroke: #1d4028;"></circle>
+                  <circle cx="16" cy="16" r="16" style="stroke-dashoffset: ${
+                    100 - percentage
+                  }; stroke: ${alertColor};"></circle>
+                </svg>
+                <div class="number">
+                  <span>${Math.round(
+                    results[index].vote_average * 10
+                  )}<sup>%</sup></span>
+                </div>
               </div>
             </div>
-          </div>
                   
                
-                <a class="hover-moviename" href ="./details.html?id=${
+                <a class="hover-moviename" href ="./movieDetails.html?id=${
                   results[index].id
                 }">${results[index].original_title}</a>
                 <p>${new Date(results[index].release_date).toLocaleDateString(
@@ -254,5 +258,10 @@ function scrollFunction() {
     document.getElementById("navbar").style.top = "-64px";
   } else {
     document.getElementById("navbar").style.top = "0px";
+  }
+}
+function decideType(mediaType, id) {
+  if (mediaType === "movie") {
+    return "movie";
   }
 }

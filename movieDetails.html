@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Movie Details</title>
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"
+      integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65"
+      crossorigin="anonymous"
+    />
+
+    <link rel="stylesheet" href="./css/details.css" />
+  </head>
+  <body>
+    <div id="root">
+      <header class="header" id="navbar">
+        <div class="left-navbar">
+          <a class="logo" href="/"
+            ><img src="./image/TMDB_logo.svg" alt="TMDB Logo"
+          /></a>
+          <ul class="navbar">
+            <li class="dropdown-movies">
+              <a href="#">Movies</a>
+              <div class="dropdown-menu">
+                <a class="nav-a" href="/movie">Popular</a
+                ><a class="nav-a" href="/movie/now-playing">Now Playing</a
+                ><a class="nav-a" href="/movie/upcoming">Upcoming</a
+                ><a class="nav-a" href="/movie/top-rated">Top Rated</a>
+              </div>
+            </li>
+            <li class="dropdown-tvshow">
+              <a href="#">TV Shows</a>
+              <div class="dropdown-menu-tv">
+                <a class="nav-a" href="/tv">Popular</a
+                ><a class="nav-a" href="/tv/airing-today">Airing Today</a
+                ><a class="nav-a" href="/tv/on-tv">On TV</a
+                ><a class="nav-a" href="/tv/top-rated">Top Rated</a>
+              </div>
+            </li>
+            <li class="dropdown-movies">
+              <a href="#">People</a>
+              <div class="dropdown-menu">
+                <a class="nav-a" href="/people/popularPeople">Popular People</a>
+              </div>
+            </li>
+            <li class="dropdown-movies">
+              <a href="#">More</a>
+              <div class="dropdown-menu">
+                <a class="nav-a" href="/more/Discussion">Discussion</a>
+                <a class="nav-a" href="/more/Leaderboard">Leaderboard</a>
+                <a class="nav-a" href="/more/Support">Support</a>
+                <a class="nav-a" href="/more/API">API</a>
+              </div>
+            </li>
+          </ul>
+        </div>
+        <div class="right-navbar">
+          <ul class="">
+            <li class="add-Icon">
+              <a href="#"><img src="./image/plus.svg" alt="Add Icon" /></a>
+            </li>
+            <li><div class="translate-lan">EN</div></li>
+
+            <li class="add-Icon">
+              <a href="#"
+                ><img
+                  src="./image/notification icon.svg"
+                  alt="Add Icon"
+                  style="filter: invert()"
+              /></a>
+            </li>
+            <li><a href="#">Login</a></li>
+
+            <li>
+              <a href="#"
+                ><img src="./image/search icon.svg"" alt="Search Icon"
+                class="search-icon" /></a
+              >
+            </li>
+          </ul>
+        </div>
+      </header>
+      <div class="details-bar">
+        <div class="dropdown-overview">
+          <button class="dropbtn">
+            Overview <img src="./image/dropdown-icon.svg" style="width: 20px" />
+          </button>
+          <div class="dropdown-content-overview">
+            <a href="#">Main</a>
+            <a href="#">Alternative</a>
+            <a href="#">Cast & Crew</a>
+            <a href="#">Release Dates</a>
+            <a href="#">Translations</a>
+            <a href="#">Watch Now</a>
+            <a href="#">Changes</a>
+            <a href="#">Report</a>
+            <a href="#">Edit</a>
+          </div>
+        </div>
+        <div class="dropdown-media">
+          <button class="dropbtn">
+            Media <img src="./image/dropdown-icon.svg" style="width: 20px" />
+          </button>
+          <div class="dropdown-content-media">
+            <a href="#">Backdrops</a>
+            <a href="#">Logos</a>
+            <a href="#">Posters</a>
+            <a href="#">Videos</a>
+          </div>
+        </div>
+        <div class="dropdown-fandom">
+          <button class="dropbtn">
+            Dropdown <img src="./image/dropdown-icon.svg" style="width: 20px" />
+          </button>
+          <div class="dropdown-content-fandom">
+            <a href="#">Discussions</a>
+            <a href="#">Reviews</a>
+          </div>
+        </div>
+
+        <div class="dropdown-share">
+          <button class="dropbtn">
+            Share <img src="./image/dropdown-icon.svg" style="width: 20px" />
+          </button>
+          <div class="dropdown-content-share">
+            <a href="#">Share Link</a>
+            <a href="#">Facebook</a>
+            <a href="#">Tweet</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="backdrop-div" id="background">
+      <div class="more-info-poster-div">
+        <div class="container mt-0">
+          <div class="more-info-wrapper">
+            <section class="poster-content">
+              <div class="poster-wrapper" id="poster-wrapper"></div>
+              <div class="content-wrappers">
+                <div class="header-content">
+                  <div class="title-info">
+                    <h2>
+                      <span id="movie-name"></span>
+
+                      <span id="release-year"></span>
+                    </h2>
+                    <div class="facts">
+                      <span class="release" id="release-date"></span
+                      ><span class="genres before" id="genres"> </span
+                      ><span class="runtime before" id="movie-duration"></span>
+                    </div>
+                  </div>
+                  <div class="score-info">
+                    <div class="flex-row">
+                      <div class="circular-progress zoom">
+                        <div class="value-container" id="value-id">
+                          0 <sup>%</sup>
+                        </div>
+                      </div>
+
+                      <div>User Score</div>
+                    </div>
+                    <div class="add-to-list-btn action-btns">
+                      <img
+                        src="./image/thumbnail_icon.svg"
+                        alt="thumbnail icon"
+                      />
+                    </div>
+                    <div class="fav-btn action-btns">
+                      <img src="./image/fav_icon.svg" alt="favourite icon" />
+                    </div>
+                    <div class="bookmark-btn action-btns">
+                      <img
+                        src="./image/bookmark_icon.svg"
+                        alt="bookmark icon"
+                      />
+                    </div>
+                    <div class="star-btn action-btns">
+                      <img src="./image/star_icon.svg" alt="star icon" />
+                    </div>
+                    <div class="play-div">
+                      <span id="myBtn">
+                        <img src="./image/play_icon.svg"" alt="" />
+                        <span>Play Trailer</span>
+                      </span>
+                      <!-- <a href="https://www.youtube.com/watch?v=zOnaAGElQg8">
+                        </a -->
+                    </div>
+                  </div>
+                  <div class="overview-info">
+                    <h3 class="tagline" id="tagline"></h3>
+                    <h3 class="overview">Overview</h3>
+                    <p id="overview"></p>
+                  </div>
+                </div>
+              </div>
+            </section>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- The Modal -->
+    <div id="myModal" class="modal">
+      <!-- Modal content -->
+      <div class="modal-content">
+        <div class="top">
+          <span class="title">Play Trailer</span>
+          <span class="close" id="closeBtn">&times;</span>
+        </div>
+        <div class="videocontainer">
+          <iframe id="iframe" class="iframe"></iframe>
+        </div>
+      </div>
+    </div>
+
+    <div class="container remove-mt">
+      <div class="div-content-wrapper">
+        <div class="left-info-div">
+          <div class="white-column-div">
+            <section class="cast-section should-fade is-fading">
+              <h3>Top Billed Cast</h3>
+              <div class="cast-scroller-div" id="cast-scroller-div">
+                </div>
+                <p><a href="#">Full Cast &amp; Crew</a></p>
+            </section>
+            <!-- <section class="social-section">
+              <div class="review-div">
+                <div class="menu">
+                  <h3 class="title-heading">Social</h3>
+                  <h3 class="review-heading">Reviews <span>1</span></h3>
+                </div>
+                <div class="content">
+                  <div class="review-container">
+                    <div class="card">
+                      <div class="grouped">
+                        <div class="avatar">
+                          <img
+                            src="https://secure.gravatar.com/avatar/blEC280vq31MVaDcsWBXuGOsYnB.jpg?s=64"
+                            loading="lazy"
+                            alt=""
+                          />
+                        </div>
+                        <div class="info">
+                          <div class="rating-wrapper">
+                            <h3>A review by The Movie Mob</h3>
+                            <div class="rounded-rating">
+                              <img
+                                src="/static/media/star_rating_icon.4909406126b3e35a8096ce40688ba81a.svg"
+                                alt="star rating icon"
+                                style="filter: invert(0)"
+                              /><span>8.0</span>
+                            </div>
+                          </div>
+                          <h5 class="h5">
+                            Written by <span>The Movie Mob</span> on Jun 17,
+                            2023
+                          </h5>
+                        </div>
+                      </div>
+                      <div class="teaser">
+                        <p class="spoiler-para">
+                          &lt;b&gt;Extraction 2 clearly learned some lessons
+                          from its predecessor and cranked things up to eleven,
+                          making a top-shelf action film that has me demanding
+                          more!&lt;/b&gt; Yes! YESsssss!!! This is what 80s
+                          action movies dreamt of being decades ago. Commando
+                          walked so Extraction 2 could soar! &nbsp;The action,
+                          gunplay, grittiness, and thin plotted-ness of this
+                          movie scream 80s classic but the production quality,
+                          stub work, and cinematography are at a whole other
+                          level. The prison break sequence with the 21-minute
+                          one-shot camera move is jaw-dropping and one of the
+                          most remarkable action set pieces I have e...
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section>
+            <section class="recommandation-section">
+              <h3>Recommendations</h3>
+              We don't have enough data to suggest any movies based on
+              Extraction 2. You can help by rating movies you've seen.
+            </section>
+          </div>
+        </div>
+        <div class="right-info-div">
+          <section class="keyword-section">
+            <div class="facts-column">
+              <p><strong>Status</strong>Released</p>
+              <p><strong>Original Language</strong>English</p>
+              <p><strong>Budget</strong>-</p>
+              <p style="margin: 0px"><strong>Revenue</strong>-</p>
+            </div>
+            <div class="keyword-column">
+              <h4>Keywords</h4>
+              <ul>
+                <li><a>mercenary</a></li>
+                <li><a>sequel</a></li>
+                <li><a>rescue mission</a></li>
+                <li><a>long take</a></li>
+                <li><a>based on graphic novel</a></li>
+              </ul>
+            </div>
+          </section> -->
+        </div>
+      </div>
+    </div>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js"
+      integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V"
+      crossorigin="anonymous"
+    ></script>
+    <script type="text/javascript" src="./js/details.js"></script>
+  </body>
+</html>
