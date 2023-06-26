@@ -66,26 +66,22 @@ fetch(`https://api.themoviedb.org/3/tv/${id}?language=en-US`, getDetails)
         const hours = Math.floor(totalTime / 60);
         const minutes = totalTime % 60;
 
-        document.getElementById(
-          "movie-duration"
-        ).innerHTML = `${hours}h ${minutes}m`;
+        document.getElementById("movie-duration").innerHTML = `${
+          hours ? hours`h` : ""
+        }${minutes}m`;
       }
     }
 
     //arrow function
-    totalTime = () => {
-      let totalTime = details.runtime;
-      const hours = Math.floor(totalTime / 60);
-      const minutes = totalTime % 60;
 
-      document.getElementById(
-        "movie-duration"
-      ).innerHTML = `${hours}h ${minutes}m`;
-    };
     //movie overview
 
-    document.getElementById("overview").innerHTML = details.overview;
-
+    if (details.overview == "") {
+      document.getElementById("overview").innerText =
+        "We don't have an overview translated in English. Help us expand our database by adding one.";
+    } else {
+      document.getElementById("overview").innerHTML = details.overview;
+    }
     //movie tagline
 
     document.getElementById("tagline").innerHTML = details.tagline;
@@ -149,9 +145,9 @@ fetch(`https://api.themoviedb.org/3/tv/${id}/videos?language=en-US`, options)
     console.log(videos);
     var iframe = document.getElementById("iframe");
 
-    // if (videos.results.length == 0) {
-    //   document.getElementById("title").display = "none";
-    // }
+    if (videos.results.length == 0) {
+      document.getElementById("play-div").style.display = "none";
+    }
 
     var videoURL = "";
     var flag = true;
@@ -230,6 +226,56 @@ window.onclick = function (event) {
   }
 };
 
+// const credits = {
+//   method: "GET",
+//   headers: {
+//     accept: "application/json",
+//     Authorization:
+//       "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIwNTNiZjc0NzgxODVjNDk1NTZhZWVjOTliZmM0YmVkMiIsInN1YiI6IjY0ODE2ZjY2ZTI3MjYwMDEwNzIwYTVmNSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.fFzsWuDE0cTML6ULHicf1SOiGoHqCemuEAXERkhk_WE",
+//   },
+// };
+
+// fetch(
+//   `https://api.themoviedb.org/3/tv/${id}/aggregate_credits?language=en-US`,
+//   credits
+// )
+//   .then((response) => response.json())
+//   .then((movieCredits) => {
+//     console.log(movieCredits);
+
+//     let cast_scroller = document.getElementById("cast-scroller-div");
+
+//     var movieCast = movieCredits.cast;
+//     console.log("Hii", movieCast);
+
+//     for (const index in movieCast) {
+//       cast_scroller.insertAdjacentHTML(
+//         "beforeend",
+
+//         `
+//       <div class="single-cast-card">
+//       <div class="cast-img-div">
+//       ${
+//         movieCast[index].profile_path
+//           ? `<img src="https://www.themoviedb.org/t/p/w138_and_h175_face${movieCast[index].profile_path}" alt="cast Image" />`
+//           : `<img src="image/person_image.svg" alt="cast Image" />`
+//       }
+//       </div>
+//       <p class="cast-original-name">${movieCast[index].name}</p>
+//       <p class="cast-character-name">${movieCast[index].character}</p>
+//     </div>
+
+//       `
+//       );
+//     }
+//   })
+//   .catch((err) => console.error(err));
+
+//////////
+
+const maxDisplayedCast = 9; // Maximum number of cast members to display initially
+let castCount = 0; // Counter variable to track the number of displayed cast members
+
 const credits = {
   method: "GET",
   headers: {
@@ -239,35 +285,80 @@ const credits = {
   },
 };
 
-fetch(`https://api.themoviedb.org/3/tv/${id}/credits?language=en-US`, credits)
+fetch(
+  `https://api.themoviedb.org/3/tv/${id}/aggregate_credits?language=en-US`,
+  credits
+)
   .then((response) => response.json())
   .then((movieCredits) => {
     console.log(movieCredits);
 
-    let cast_scroller = document.getElementById("cast-scroller-div");
+    let castScroller = document.getElementById("cast-scroller-div");
 
     var movieCast = movieCredits.cast;
-    console.log("Hii", movieCast);
 
     for (const index in movieCast) {
-      cast_scroller.insertAdjacentHTML(
-        "beforeend",
-
+      if (castCount < maxDisplayedCast) {
+        castScroller.insertAdjacentHTML(
+          "beforeend",
+          `
+          <div class="single-cast-card">
+            <div class="cast-img-div">
+              ${
+                movieCast[index].profile_path
+                  ? `<img src="https://www.themoviedb.org/t/p/w138_and_h175_face${movieCast[index].profile_path}" alt="cast Image" />`
+                  : `<img src="image/person_image.svg" alt="cast Image" />`
+              }
+            </div>
+            <p class="cast-original-name">${movieCast[index].name}</p>
+            ${`<p class="cast-character-name">${movieCast[index].roles[0].character}</p>`}
+          </div>
         `
-      <div class="single-cast-card">
-      <div class="cast-img-div">
-      ${
-        movieCast[index].profile_path
-          ? `<img src="https://www.themoviedb.org/t/p/w138_and_h175_face${movieCast[index].profile_path}" alt="cast Image" />`
-          : `<img src="image/person_image.svg" alt="cast Image" />`
+        );
+
+        castCount++;
+      } else {
+        break; // Stop looping once the maximum number of cast members has been displayed
       }
-      </div>
-      <p class="cast-original-name">${movieCast[index].name}</p>
-      <p class="cast-character-name">${movieCast[index].character}</p>
-    </div>
-      
+    }
+
+    if (castCount < movieCast.length) {
+      castScroller.insertAdjacentHTML(
+        "beforeend",
+        `
+        <button id="view-more-button" class="viewMore">
+        View More <img src ="../image/right-icon.svg" height ="30px" width="50px"></img></button>
       `
       );
+
+      document.getElementById("view-more-button").onclick = () => {
+        showAllCast(movieCast);
+      };
     }
   })
   .catch((err) => console.error(err));
+
+function showAllCast(movieCast) {
+  const viewMoreButton = document.getElementById("view-more-button");
+  viewMoreButton.style.display = "none"; // Hide the "View More" button
+
+  for (const index in movieCast) {
+    let castScroller = document.getElementById("cast-scroller-div");
+    castScroller.insertAdjacentHTML(
+      "beforeend",
+      `
+          <div class="single-cast-card">
+            <div class="cast-img-div">
+              ${
+                movieCast[index].profile_path
+                  ? `<img src="https://www.themoviedb.org/t/p/w138_and_h175_face${movieCast[index].profile_path}" alt="cast Image" />`
+                  : `<img src="image/person_image.svg" alt="cast Image" />`
+              }
+            </div>
+            <p class="cast-original-name">${movieCast[index].name}</p>
+            <p class="cast-character-name">${movieCast[index].character}</p>
+          </div>
+        `
+    );
+  } // Replace the content of castScroller with the updated HTML
+}

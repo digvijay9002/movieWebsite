@@ -621,7 +621,7 @@ ul .navbar {
 
 .facts-column p {
   font-size: 1em;
-  margin: 0 0 20px;
+  font-weight: 500;
 }
 
 .facts-column p strong {
@@ -645,6 +645,7 @@ ul .navbar {
   justify-content: flex-start;
   padding-bottom: 30px;
   width: 100%;
+  padding-left: 0;
 }
 
 .keyword-column ul li {
@@ -821,6 +822,8 @@ ul .navbar {
   cursor: pointer;
   height: 141px;
   width: 250px;
+  display: flex;
+  justify-content: center;
 }
 
 .image-content:hover .release-date {
@@ -870,7 +873,6 @@ ul .navbar {
 .release-date .black-color {
   -webkit-filter: invert(1);
   filter: invert(1);
-  margin-right: 4px;
   padding-left: 4px;
 }
 
@@ -906,6 +908,10 @@ ul .navbar {
   font-family: "Source Sans Pro", Arial, sans-serif;
 }
 
+.avatar {
+  width: 64px;
+  height: 64px;
+}
 /* Dropdown Button */
 .dropbtn {
   background-color: white;
@@ -1222,4 +1228,88 @@ ul .navbar {
   width: 100%;
   height: 100%;
   position: absolute;
+}
+
+.viewMore {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  font-size: 18px;
+  font-weight: 600;
+  background-color: transparent;
+  border: none;
+  margin-left: 3%;
+  margin-right: 3%;
+}
+
+#readMoreButton {
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.Null_image {
+  display: flex;
+  width: 150px;
+  align-items: center;
+}
+.footer {
+  display: flex;
+  justify-content: center;
+  align-items: baseline;
+  background-color: #03243f;
+  padding: 80px 0 80px 0;
+  gap: 15px;
+}
+.footer h3 {
+  font-weight: bold;
+  margin-bottom: 4px;
+  font-size: 20px;
+  white-space: nowrap;
+}
+.footer a {
+  font-size: 17px;
+}
+.footer a,
+.footer h3 {
+  color: #ffffff;
+}
+.footer .logo-div {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+.footer .logo-div img {
+  position: absolute;
+  right: 0;
+  bottom: -22px;
+}
+.footer .logo-div a {
+  position: relative;
+  top: 118px;
+  border-color: #fff;
+  background-color: #fff;
+  color: rgb(1, 180, 228);
+  font-size: 1.3em;
+  font-weight: bold;
+  display: inline-block;
+  word-wrap: break-word;
+  white-space: normal;
+  padding: 8px 16px;
+  border-radius: 5px;
+}
+.footer .mr {
+  margin-right: 40px;
+}
+
+.tmdb-footer-logo {
+  width: 130px;
+}
+
+.info-div ul li {
+  line-height: 1.6em;
+}
+
+.footer ul {
+  padding-left: 0;
 }

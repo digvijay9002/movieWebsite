@@ -21,6 +21,24 @@ fetch(`https://api.themoviedb.org/3/movie/${id}?language=en-US'`, getDetails)
     let poster = document.getElementById("poster-wrapper");
     poster.innerHTML = "";
 
+    /////Right details bar////////////////////////
+    console.log(details.budget);
+    document.getElementById(
+      "original-language"
+    ).innerHTML = `${details.original_language}`;
+    document.getElementById("released").innerHTML = `${
+      details.status ? details.status : "-"
+    }`;
+
+    budget = details.budget.toLocaleString("en-US");
+
+    document.getElementById("budget").innerHTML = `$ ${budget ? budget : "-"}`;
+
+    revenue = details.revenue.toLocaleString("en-US");
+    document.getElementById("revenue").innerHTML = `$ ${
+      revenue ? revenue : "-"
+    }`;
+
     //backdrop image
     document.getElementById(
       "background"
@@ -220,7 +238,7 @@ fetch(`https://api.themoviedb.org/3/movie/${id}/videos?language=en-US`, options)
   })
   .catch((err) => console.error(err));
 
-const maxDisplayedCast = 13; // Maximum number of cast members to display initially
+const maxDisplayedCast = 9; // Maximum number of cast members to display initially
 let castCount = 0; // Counter variable to track the number of displayed cast members
 
 const credits = {
@@ -233,7 +251,7 @@ const credits = {
 };
 
 fetch(
-  `https://api.themoviedb.org/3/movie/385687/credits?language=en-US`,
+  `https://api.themoviedb.org/3/movie/${id}/credits?language=en-US`,
   credits
 )
   .then((response) => response.json())
@@ -273,7 +291,8 @@ fetch(
       castScroller.insertAdjacentHTML(
         "beforeend",
         `
-        <button id="view-more-button">View More</button>
+        <button id="view-more-button" class="viewMore">
+        View More <img src ="../image/right-icon.svg" height ="30px" width="50px"></img></button>
       `
       );
 
@@ -308,3 +327,207 @@ function showAllCast(movieCast) {
     );
   } // Replace the content of castScroller with the updated HTML
 }
+
+////// Keywords /////
+
+const getKeywords = {
+  method: "GET",
+  headers: {
+    accept: "application/json",
+    Authorization:
+      "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIwNTNiZjc0NzgxODVjNDk1NTZhZWVjOTliZmM0YmVkMiIsInN1YiI6IjY0ODE2ZjY2ZTI3MjYwMDEwNzIwYTVmNSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.fFzsWuDE0cTML6ULHicf1SOiGoHqCemuEAXERkhk_WE",
+  },
+};
+
+fetch(`https://api.themoviedb.org/3/movie/${id}/keywords`, getKeywords)
+  .then((response) => response.json())
+  .then((response_keywords) => {
+    console.log(response_keywords);
+
+    let keywords = response_keywords.keywords;
+
+    let keyword_column = document.getElementById("keyword-column");
+
+    for (const index in keywords) {
+      keyword_column.insertAdjacentHTML(
+        "beforeend",
+
+        `
+       
+                <li><a>${keywords[index].name}</a></li>
+             
+       `
+      );
+    }
+  })
+  .catch((err) => console.error(err));
+/////////////////////////////////Review Section //////////////
+const allReviews = {
+  method: "GET",
+  headers: {
+    accept: "application/json",
+    Authorization:
+      "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIwNTNiZjc0NzgxODVjNDk1NTZhZWVjOTliZmM0YmVkMiIsInN1YiI6IjY0ODE2ZjY2ZTI3MjYwMDEwNzIwYTVmNSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.fFzsWuDE0cTML6ULHicf1SOiGoHqCemuEAXERkhk_WE",
+  },
+};
+
+// fetch(
+//   `https://api.themoviedb.org/3/movie/${id}/reviews?language=en-US&page=1`,
+//   allReviews
+// )
+//   .then((response) => response.json())
+//   .then((reviewResponse) => {
+//     response = reviewResponse.results[0];
+//     console.log(response);
+
+//     document.getElementById(
+//       "reviewer"
+//     ).innerHTML = `A review by ${response.author}`;
+
+//     document.getElementById("reviewRating").innerHTML = response.author_details
+//       .rating
+//       ? `${response.author_details.rating}.0`
+//       : "";
+
+//     document.getElementById("reviewerName").innerHTML = response.author;
+//     document.getElementById("review").innerHTML = response.content;
+
+//     imageSRC = response.author_details.avatar_path;
+//     var avatar = imageSRC.slice(1);
+//     document.getElementById("reviewerProfile").src = `${avatar}`;
+//   })
+
+//   .catch((err) => console.error(err));
+
+const reviewMaxLength = 800; // Maximum number of characters to display
+
+fetch(
+  `https://api.themoviedb.org/3/movie/${id}/reviews?language=en-US&page=1`,
+  allReviews
+)
+  .then((response) => response.json())
+  .then((reviewResponse) => {
+    const response = reviewResponse.results[0];
+    console.log("response -", response);
+
+    if (reviewResponse.results[0] == null) {
+      document.getElementById("reviewContent").style.display = "none";
+      document.getElementById("reviewCount").innerHTML = "0";
+    } else {
+      // Truncate the review content if it exceeds the maximum length
+      let truncatedContent = response.content;
+
+      if (truncatedContent.length > reviewMaxLength) {
+        truncatedContent =
+          truncatedContent.substring(0, reviewMaxLength) + "...";
+      }
+      document.getElementById("reviewCount").innerHTML =
+        reviewResponse.results.length;
+      document.getElementById(
+        "reviewer"
+      ).innerHTML = `A review by ${response.author}`;
+
+      document.getElementById("reviewRating").innerHTML = response
+        .author_details.rating
+        ? `${response.author_details.rating}.0`
+        : "";
+
+      document.getElementById("reviewerName").innerHTML = response.author;
+
+      // Display the truncated review
+      document.getElementById("truncatedReview").innerHTML = truncatedContent;
+
+      // Set up the "Read More" button click event
+      document
+        .getElementById("readMoreButton")
+        .addEventListener("click", () => {
+          // Display the full review
+          document.getElementById("truncatedReview").innerHTML =
+            response.content;
+
+          // Hide the "Read More" button
+          document.getElementById("readMoreButton").style.display = "none";
+        });
+
+      imageSRC = response.author_details.avatar_path;
+
+      if (imageSRC != null) {
+        var avatar = imageSRC.slice(1);
+      }
+      var avatar_div = document.getElementById("reviewerProfile");
+      avatar_div.src = avatar;
+
+      avatar_div.addEventListener("error", () => {
+        // Display a custom image
+        avatar_div.src = `https://www.themoviedb.org/t/p/w64_and_h64_face/${imageSRC}`;
+      });
+    }
+  })
+  .catch((err) => console.error(err));
+
+/////Movie Recommendation
+
+const rec = {
+  method: "GET",
+  headers: {
+    accept: "application/json",
+    Authorization:
+      "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIwNTNiZjc0NzgxODVjNDk1NTZhZWVjOTliZmM0YmVkMiIsInN1YiI6IjY0ODE2ZjY2ZTI3MjYwMDEwNzIwYTVmNSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.fFzsWuDE0cTML6ULHicf1SOiGoHqCemuEAXERkhk_WE",
+  },
+};
+
+fetch(
+  `https://api.themoviedb.org/3/movie/${id}/recommendations?language=en-US&page=1`,
+  rec
+)
+  .then((response) => response.json())
+  .then((recommended) => {
+    var recomWrapper = document.getElementById("scroller");
+    var recommendations = recommended.results;
+    for (const index in recommended.results) {
+      recomWrapper.insertAdjacentHTML(
+        "beforeend",
+        `
+        <div class="mini-card" id="mini-card">
+      <div class="image-content false">
+      ${
+        recommendations[index].backdrop_path
+          ? `<img src="https://www.themoviedb.org/t/p/w250_and_h141_face${recommendations[index].backdrop_path}" alt="movie poster"></img>`
+          : `<img src= "./image/rimage2.svg" alt="movie poster" class="Null_image">`
+      }
+        
+
+      <div class="meta">
+        <div class="release-date">
+          <img src="./image/rdate.svg" alt="date Icon" class="date-img">
+          <span id="rMovieDate">2017-10-27</span>
+          <div class="action-img false">
+            <img src= "./image/rstar.svg" alt="fav Icon" class="black-color">
+            <img src="./image/rBookmark.svg" alt="Watch List Icon" class="black-color">
+            <img src="./image/rFavorite.svg" alt="star rating icon" class="black-color">
+          </div>
+        </div>
+        <span>
+
+        </span>
+      </div>
+    </div>
+    <div class="info-div-recommand">
+      <a class="name-href" href="/movie/445954">
+        <bdi title="${recommendations[index].title}">${
+          recommendations[index].title
+        }</bdi>
+      </a><span class="vote-average">${Math.round(
+        recommended.results[index].vote_average * 10
+      )}%
+      
+      </span>
+    </div>
+    </div>
+    `
+      );
+    }
+
+    console.log("recom", recommended);
+  })
+  .catch((err) => console.error(err));
