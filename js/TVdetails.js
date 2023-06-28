@@ -56,10 +56,10 @@ fetch(`https://api.themoviedb.org/3/tv/${id}?language=en-US`, getDetails)
     });
 
     //Movie Duration
-    if (details.episode_run_time == 0) {
+    if (details.episode_run_time.length == 0) {
       document.getElementById("movie-duration").style.display = "none";
     } else {
-      let totalTime = details.episode_run_time;
+      let totalTime = details.episode_run_time[0];
       toHoursAndMinutes(totalTime);
 
       function toHoursAndMinutes(totalTime) {
@@ -67,12 +67,46 @@ fetch(`https://api.themoviedb.org/3/tv/${id}?language=en-US`, getDetails)
         const minutes = totalTime % 60;
 
         document.getElementById("movie-duration").innerHTML = `${
-          hours ? hours`h` : ""
-        }${minutes}m`;
+          hours ? hours + "h" : ""
+        } ${minutes} m`;
       }
     }
 
-    //arrow function
+    //right side facts
+
+    document.getElementById("original_name").innerHTML = details.original_name;
+    document.getElementById("status").innerHTML = details.status;
+    details.networks.length
+      ? (document.getElementById(
+          "network"
+        ).src = `https://www.themoviedb.org/t/p/h30${details.networks[0].logo_path}`)
+      : (document.getElementById("network").src = "");
+    document.getElementById("type").innerHTML = details.type;
+    const allLanguage = {
+      method: "GET",
+      headers: {
+        accept: "application/json",
+        Authorization:
+          "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIwNTNiZjc0NzgxODVjNDk1NTZhZWVjOTliZmM0YmVkMiIsInN1YiI6IjY0ODE2ZjY2ZTI3MjYwMDEwNzIwYTVmNSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.fFzsWuDE0cTML6ULHicf1SOiGoHqCemuEAXERkhk_WE",
+      },
+    };
+    fetch("https://api.themoviedb.org/3/configuration/languages", allLanguage)
+      .then((response) => response.json())
+      .then((languages) => {
+        var languageCode = details.original_language; // Language code for English
+        // console.log("test", details.original_language);
+        // Find the language object with the matching language code
+        const language = languages.find(
+          (lang) => lang.iso_639_1 === languageCode
+        );
+
+        // Retrieve the full name of the language
+        let languageFullName = language ? language.english_name : "Unknown";
+
+        document.getElementById("original_language").innerHTML =
+          languageFullName || "-";
+      })
+      .catch((err) => console.error(err));
 
     //movie overview
 
@@ -342,7 +376,7 @@ function showAllCast(movieCast) {
   const viewMoreButton = document.getElementById("view-more-button");
   viewMoreButton.style.display = "none"; // Hide the "View More" button
 
-  for (const index in movieCast) {
+  for (let index = maxDisplayedCast; index < movieCast.length; index++) {
     let castScroller = document.getElementById("cast-scroller-div");
     castScroller.insertAdjacentHTML(
       "beforeend",
@@ -356,9 +390,265 @@ function showAllCast(movieCast) {
               }
             </div>
             <p class="cast-original-name">${movieCast[index].name}</p>
-            <p class="cast-character-name">${movieCast[index].character}</p>
+            <p class="cast-character-name">${
+              movieCast[index].roles[0].character
+            }</p>
           </div>
         `
     );
   } // Replace the content of castScroller with the updated HTML
 }
+
+////TV series Details
+
+const allDetails = {
+  method: "GET",
+  headers: {
+    accept: "application/json",
+    Authorization:
+      "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIwNTNiZjc0NzgxODVjNDk1NTZhZWVjOTliZmM0YmVkMiIsInN1YiI6IjY0ODE2ZjY2ZTI3MjYwMDEwNzIwYTVmNSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.fFzsWuDE0cTML6ULHicf1SOiGoHqCemuEAXERkhk_WE",
+  },
+};
+
+fetch(`https://api.themoviedb.org/3/tv/${id}?language=en-US`, allDetails)
+  .then((response) => response.json())
+  .then((tvDetails) => {
+    console.log(tvDetails);
+    var Scroller = document.getElementById("tvScroller");
+
+    let currentSeason = tvDetails.seasons[tvDetails.seasons.length - 1].air_date
+      ? tvDetails.seasons[tvDetails.seasons.length - 1]
+      : tvDetails.seasons[tvDetails.seasons.length - 2];
+
+    var seasonCard = document.getElementById("season-card");
+    seasonCard.insertAdjacentHTML(
+      "beforeend",
+      `
+          <div class="flex">
+          <div class="season-poster poster-flex">
+          ${
+            currentSeason.poster_path
+              ? `<img
+              src="https://www.themoviedb.org/t/p/w130_and_h195_bestv2${currentSeason.poster_path}"
+              alt="Current Season Image"
+             
+            />`
+              : `<div class="glyphicons_v2 picture grey poster no_image_holder w130_and_h195"></div>`
+          }
+          </div>
+          <div class="season-content">
+            <h2>Season ${currentSeason.season_number}</h2>
+            <h4> ${new Date(currentSeason.air_date).toLocaleDateString(
+              "en-us",
+              {
+                year: "numeric",
+              }
+            )} | ${currentSeason.episode_count} Episodes</h4>
+            <p></p>
+          </div>
+        </div>
+      
+      
+      `
+    );
+    console.log("Current Season:", currentSeason);
+
+    console.log("TV Details", tvDetails);
+  })
+  .catch((err) => console.error(err));
+
+////Recommendations
+const rec = {
+  method: "GET",
+  headers: {
+    accept: "application/json",
+    Authorization:
+      "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIwNTNiZjc0NzgxODVjNDk1NTZhZWVjOTliZmM0YmVkMiIsInN1YiI6IjY0ODE2ZjY2ZTI3MjYwMDEwNzIwYTVmNSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.fFzsWuDE0cTML6ULHicf1SOiGoHqCemuEAXERkhk_WE",
+  },
+};
+
+fetch(
+  `https://api.themoviedb.org/3/tv/${id}/recommendations?language=en-US&page=1`,
+  rec
+)
+  .then((response) => response.json())
+  .then((recommended) => {
+    var recomWrapper = document.getElementById("TVscroller");
+    var recommendations = recommended.results;
+    console.log("DC HII", recommended);
+    for (const index in recommended.results) {
+      recomWrapper.insertAdjacentHTML(
+        "beforeend",
+        `<a href = "tvDetails.html?id=${recommendations[index].id}"> 
+          <div class="mini-card" id="mini-card">
+        <div class="image-content false">
+        ${
+          recommendations[index].backdrop_path
+            ? `<img src="https://www.themoviedb.org/t/p/w250_and_h141_face${recommendations[index].backdrop_path}" alt="movie poster"></img>`
+            : `<div class="glyphicons_v2 picture grey backdrop no_image_holder w250_and_h141"></div>`
+        }
+          
+  
+        <div class="meta">
+          <div class="release-date">
+            <img src="./image/rdate.svg" alt="date Icon" class="date-img">
+            <span id="rMovieDate">2017-10-27</span>
+            <div class="action-img false">
+              <img src= "./image/rstar.svg" alt="fav Icon" class="black-color">
+              <img src="./image/rBookmark.svg" alt="Watch List Icon" class="black-color">
+              <img src="./image/rFavorite.svg" alt="star rating icon" class="black-color">
+            </div>
+          </div>
+          <span>
+  
+          </span>
+        </div>
+      </div>
+      <div class="info-div-recommand">
+        
+          <bdi title="${recommendations[index].original_name}">${
+          recommendations[index].original_name
+        }</bdi>
+        <span class="vote-average">${Math.round(
+          recommended.results[index].vote_average * 10
+        )}%
+        
+        </span>
+      </div>
+      </div>
+      </a>
+      `
+      );
+    }
+
+    console.log("recom", recommended);
+  })
+  .catch((err) => console.error(err));
+
+///Keywords
+const getKeywords = {
+  method: "GET",
+  headers: {
+    accept: "application/json",
+    Authorization:
+      "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIwNTNiZjc0NzgxODVjNDk1NTZhZWVjOTliZmM0YmVkMiIsInN1YiI6IjY0ODE2ZjY2ZTI3MjYwMDEwNzIwYTVmNSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.fFzsWuDE0cTML6ULHicf1SOiGoHqCemuEAXERkhk_WE",
+  },
+};
+
+fetch(`https://api.themoviedb.org/3/tv/${id}/keywords`, getKeywords)
+  .then((response) => response.json())
+  .then((response_keywords) => {
+    console.log("keyword-response", response_keywords);
+
+    let keywords = response_keywords.results;
+
+    let keyword_column = document.getElementById("keyword-column");
+
+    for (const index in keywords) {
+      keyword_column.insertAdjacentHTML(
+        "beforeend",
+
+        `
+       
+                <li><a>${keywords[index].name}</a></li>
+             
+       `
+      );
+    }
+  })
+  .catch((err) => console.error(err));
+
+////Review Section
+
+const allReviews = {
+  method: "GET",
+  headers: {
+    accept: "application/json",
+    Authorization:
+      "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIwNTNiZjc0NzgxODVjNDk1NTZhZWVjOTliZmM0YmVkMiIsInN1YiI6IjY0ODE2ZjY2ZTI3MjYwMDEwNzIwYTVmNSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.fFzsWuDE0cTML6ULHicf1SOiGoHqCemuEAXERkhk_WE",
+  },
+};
+
+const reviewMaxLength = 800; // Maximum number of characters to display
+
+fetch(
+  `https://api.themoviedb.org/3/tv/${id}/reviews?language=en-US&page=1`,
+  allReviews
+)
+  .then((response) => response.json())
+  .then((reviewResponse) => {
+    const response = reviewResponse.results[0];
+    console.log("response -", reviewResponse);
+
+    if (reviewResponse.results.length == 0) {
+      document.getElementById("reviewContent").style.display = "none";
+      document.getElementById("reviewCount").innerHTML = "0";
+      // document.getElementById("review").innerHTML = "Nothing found";
+    } else {
+      // Truncate the review content if it exceeds the maximum length
+      let truncatedContent = response.content;
+
+      if (truncatedContent.length > reviewMaxLength) {
+        truncatedContent =
+          truncatedContent.substring(0, reviewMaxLength) + "...";
+
+        document.getElementById("readMoreButton").innerHTML = "Read More";
+      }
+
+      if (truncatedContent.length < reviewMaxLength) {
+        truncatedContent =
+          truncatedContent.substring(0, reviewMaxLength) + "...";
+
+        document.getElementById("readMoreButton").innerHTML = "";
+      }
+      document.getElementById("reviewCount").innerHTML =
+        reviewResponse.results.length;
+      document.getElementById(
+        "reviewer"
+      ).innerHTML = `A review by ${response.author}`;
+
+      document.getElementById("reviewRating").innerHTML = response
+        .author_details.rating
+        ? `${response.author_details.rating}.0`
+        : (document.getElementById("rounded-rating").style.display = "none");
+
+      document.getElementById("reviewerName").innerHTML = response.author;
+
+      document.getElementById("reviewDate").innerHTML = new Date(
+        response.created_at
+      ).toLocaleDateString("en-us", {
+        month: "long",
+        day: "numeric",
+        year: "numeric",
+      });
+
+      // Display the truncated review
+      document.getElementById("truncatedReview").innerHTML = truncatedContent;
+
+      // Set up the "Read More" button click event
+      document
+        .getElementById("readMoreButton")
+        .addEventListener("click", () => {
+          // Display the full review
+          document.getElementById("truncatedReview").innerHTML =
+            response.content;
+
+          // Hide the "Read More" button
+          document.getElementById("readMoreButton").style.display = "none";
+        });
+
+      imageSRC = response.author_details.avatar_path;
+
+      if (imageSRC != null) {
+        var avatar = imageSRC.slice(1);
+      }
+      var avatar_div = document.getElementById("reviewerProfile");
+      avatar_div.src = avatar;
+
+      avatar_div.addEventListener("error", () => {
+        // Display a custom image
+        avatar_div.src = `../image/person_image.svg`;
+      });
+    }
+  })
+  .catch((err) => console.error(err));

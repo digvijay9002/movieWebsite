@@ -16,6 +16,7 @@
     />
 
     <link rel="stylesheet" href="./css/details.css" />
+    <link rel="icon" type="image/x-icon" href="./image/TMDB_logo.svg">
   </head>
   <body>
     <div id="root">
@@ -228,6 +229,128 @@
               <div class="cast-scroller-div" id="cast-scroller-div"></div>
               <p><a href="#">Full Cast &amp; Crew</a></p>
             </section>
+
+            <section class="current-season">
+              <h3>Current Season</h3>
+              <div class="season-card" id="season-card"></div>
+            </section>
+
+            <section class="social-section">
+              <div class="review-div">
+                <div class="menu">
+                  <h3 class="title-heading">Social</h3>
+                  <h3 class="review-heading">Reviews <span id="reviewCount"></span></h3>
+                </div>
+                <div class="content" id="reviewContent">
+                  <div class="review-container">
+                    <div class="card">
+                      <div class="grouped">
+                        <div class="avatar" id="avatar-div">
+                          <img
+                            loading="lazy"
+                            id="reviewerProfile"
+                            class="avatar"
+                          />
+                        </div>
+                        <div class="info">
+                          <div class="rating-wrapper">
+                            <h3 id="reviewer"></h3>
+                            <div class="rounded-rating" id="rounded-rating">
+                              <img src="./image/rating_star.svg"" style="filter:
+                              invert(0)"/>
+                              <span id="reviewRating"></span>
+                            </div>
+                          </div>
+                          <h5 class="h5">
+                            Written by
+                            <span id="reviewerName"></span> on
+                            <span id="reviewDate"> </span>
+                          </h5>
+                        </div>
+                      </div>
+                      <div class="teaser">
+                        <!-- <p class="spoiler-para" id="review"></p> -->
+                        <p id="truncatedReview">  </p>
+                        <u><a id="readMoreButton">Read More</a></u>
+
+                        <!-- <button id="readMoreButton">Read More</button> -->
+                      </div>
+                    </div>
+                  </div>
+            </section>
+            <section class="recommandation-section">
+              <h3>Recommendations</h3>
+              <div class="recommandation-container should-fade is-fading">
+                <div class="scroller" id="TVscroller"></div>
+              </div>
+            </section>
+          </div>
+          
+          </div>
+          <section class="keyword-section">
+            <div class="facts-column">
+              <strong>Original Name</strong><p id="original_name">Amor Perfeito</p>
+             <strong>Status</strong> <p id="status">Returning Series</p>
+              <strong>Network</strong>
+               <p> <img id="network" alt=""></p>
+                <strong>Type</strong><p id="type">Scripted</p>
+                <strong>Original Language</strong><p id="original_language">Portuguese</p>
+              </div>
+              <div class="keyword-column">
+                <h4>Keywords</h4>
+                <ul id="keyword-column"> 
+                </ul>
+              </div>
+            </section>
+          </div>
+          </div>
+          <div class="footer">
+            <div class="logo-div mr">
+              <img
+                src="./image/footer_logo.svg"
+                alt="TMDB Logo"
+                class="tmdb-footer-logo"
+              />
+              <a href="#">JOIN THE COMMUNITY</a>
+            </div>
+      
+            <div class="info-div mr">
+              <h3>THE BASICS</h3>
+              <ul>
+                <li><a href="#">About TMDB</a></li>
+                <li><a href="#">Contact Us</a></li>
+                <li><a href="#">Support Forums</a></li>
+                <li><a href="#">API</a></li>
+                <li><a href="#">System Status</a></li>
+              </ul>
+            </div>
+            <div class="info-div mr">
+              <h3>GET INVOLVED</h3>
+              <ul>
+                <li><a href="#">Contribution Bible</a></li>
+                <li><a href="#">Add New Movie</a></li>
+                <li><a href="#">Add New TV Show</a></li>
+              </ul>
+            </div>
+      
+            <div class="info-div mr">
+              <h3>Community</h3>
+              <ul>
+                <li><a href="#">Guidelines</a></li>
+                <li><a href="#">Discussions</a></li>
+                <li><a href="#">Leaderboard</a></li>
+                <li><a href="#">Twitter</a></li>
+              </ul>
+            </div>
+      
+            <div class="info-div">
+              <h3>LEGAL</h3>
+              <ul>
+                <li><a href="#">Terms of Use</a></li>
+                <li><a href="#">API Terms of Use</a></li>
+                <li><a href="#">Privacy Policy</a></li>
+              </ul>
+            </div>
           </div>
 
           <script

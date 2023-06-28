@@ -23,21 +23,63 @@ fetch(`https://api.themoviedb.org/3/movie/${id}?language=en-US'`, getDetails)
 
     /////Right details bar////////////////////////
     console.log(details.budget);
-    document.getElementById(
-      "original-language"
-    ).innerHTML = `${details.original_language}`;
+
+    const allLanguage = {
+      method: "GET",
+      headers: {
+        accept: "application/json",
+        Authorization:
+          "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIwNTNiZjc0NzgxODVjNDk1NTZhZWVjOTliZmM0YmVkMiIsInN1YiI6IjY0ODE2ZjY2ZTI3MjYwMDEwNzIwYTVmNSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.fFzsWuDE0cTML6ULHicf1SOiGoHqCemuEAXERkhk_WE",
+      },
+    };
+
+    fetch("https://api.themoviedb.org/3/configuration/languages", allLanguage)
+      .then((response) => response.json())
+      .then((languages) => {
+        var languageCode = details.original_language; // Language code for English
+
+        // Find the language object with the matching language code
+        const language = languages.find(
+          (lang) => lang.iso_639_1 === languageCode
+        );
+
+        // Retrieve the full name of the language
+        const languageFullName = language ? language.english_name : "Unknown";
+
+        document.getElementById("original-language").innerHTML =
+          languageFullName || "-";
+
+        console.log("languages", languages);
+      })
+      .catch((err) => console.error(err));
+
+    // document.getElementById("original-language").innerHTML =
+    //   languageNames[details.original_language] || "-";
     document.getElementById("released").innerHTML = `${
       details.status ? details.status : "-"
     }`;
 
-    budget = details.budget.toLocaleString("en-US");
+    let budget = details.budget;
 
-    document.getElementById("budget").innerHTML = `$ ${budget ? budget : "-"}`;
+    // Check if the budget is 0 or null
+    if (budget === 0 || budget === null) {
+      budget = "-";
+    } else {
+      budget = `$ ${budget.toLocaleString("en-US")}`;
+    }
 
-    revenue = details.revenue.toLocaleString("en-US");
-    document.getElementById("revenue").innerHTML = `$ ${
-      revenue ? revenue : "-"
-    }`;
+    document.getElementById("budget").innerHTML = ` ${budget}`;
+
+    let revenue = details.revenue;
+
+    // Check if the budget is 0 or null
+    if (revenue === 0 || revenue === null) {
+      revenue = "-";
+    } else {
+      revenue = `$ ${revenue.toLocaleString("en-US")}`;
+    }
+
+    document.getElementById("revenue").innerHTML = `${revenue}`;
 
     //backdrop image
     document.getElementById(
@@ -92,10 +134,11 @@ fetch(`https://api.themoviedb.org/3/movie/${id}?language=en-US'`, getDetails)
       const hours = Math.floor(totalTime / 60);
       const minutes = totalTime % 60;
 
-      document.getElementById(
-        "movie-duration"
-      ).innerHTML = `${hours}h ${minutes}m`;
+      document.getElementById("movie-duration").innerHTML = `${
+        hours ? hours + "h" : ""
+      } ${minutes}m`;
     };
+
     //movie overview
 
     document.getElementById("overview").innerHTML = details.overview;
@@ -292,7 +335,7 @@ fetch(
         "beforeend",
         `
         <button id="view-more-button" class="viewMore">
-        View More <img src ="../image/right-icon.svg" height ="30px" width="50px"></img></button>
+        View More <img src ="../image/right-icon.svg" height ="auto" width="25px"></img></button>
       `
       );
 
@@ -307,7 +350,10 @@ function showAllCast(movieCast) {
   const viewMoreButton = document.getElementById("view-more-button");
   viewMoreButton.style.display = "none"; // Hide the "View More" button
 
-  for (const index in movieCast) {
+  // castScroller.innerHTML = "";
+
+  // console.log("Length:", movieCast.length);
+  for (let index = maxDisplayedCast; index < movieCast.length; index++) {
     let castScroller = document.getElementById("cast-scroller-div");
     castScroller.insertAdjacentHTML(
       "beforeend",
@@ -420,6 +466,8 @@ fetch(
       if (truncatedContent.length > reviewMaxLength) {
         truncatedContent =
           truncatedContent.substring(0, reviewMaxLength) + "...";
+
+        document.getElementById("readMoreButton").innerHTML = "Read More";
       }
       document.getElementById("reviewCount").innerHTML =
         reviewResponse.results.length;
@@ -430,9 +478,17 @@ fetch(
       document.getElementById("reviewRating").innerHTML = response
         .author_details.rating
         ? `${response.author_details.rating}.0`
-        : "";
+        : (document.getElementById("rounded-rating").style.display = "none");
 
       document.getElementById("reviewerName").innerHTML = response.author;
+
+      document.getElementById("reviewDate").innerHTML = new Date(
+        response.created_at
+      ).toLocaleDateString("en-us", {
+        month: "long",
+        day: "numeric",
+        year: "numeric",
+      });
 
       // Display the truncated review
       document.getElementById("truncatedReview").innerHTML = truncatedContent;
@@ -459,7 +515,7 @@ fetch(
 
       avatar_div.addEventListener("error", () => {
         // Display a custom image
-        avatar_div.src = `https://www.themoviedb.org/t/p/w64_and_h64_face/${imageSRC}`;
+        avatar_div.src = `./image/person_image.svg`;
       });
     }
   })
@@ -487,13 +543,13 @@ fetch(
     for (const index in recommended.results) {
       recomWrapper.insertAdjacentHTML(
         "beforeend",
-        `
+        `<a href = "movieDetails.html?id=${recommendations[index].id}"> 
         <div class="mini-card" id="mini-card">
       <div class="image-content false">
       ${
         recommendations[index].backdrop_path
           ? `<img src="https://www.themoviedb.org/t/p/w250_and_h141_face${recommendations[index].backdrop_path}" alt="movie poster"></img>`
-          : `<img src= "./image/rimage2.svg" alt="movie poster" class="Null_image">`
+          : `<div class="glyphicons_v2 picture grey backdrop no_image_holder w250_and_h141"></div>`
       }
         
 
@@ -513,17 +569,18 @@ fetch(
       </div>
     </div>
     <div class="info-div-recommand">
-      <a class="name-href" href="/movie/445954">
+      
         <bdi title="${recommendations[index].title}">${
           recommendations[index].title
         }</bdi>
-      </a><span class="vote-average">${Math.round(
+      <span class="vote-average">${Math.round(
         recommended.results[index].vote_average * 10
       )}%
       
       </span>
     </div>
     </div>
+    </a>
     `
       );
     }
