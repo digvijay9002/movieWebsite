@@ -50,7 +50,7 @@ function popularNow(url, mediaType, title, date) {
     .then((response) => {
       let posters = document.getElementById("popular-movie");
       console.log("DC", response);
-      
+
       let results = response.results;
       console.log(
         new Date().toLocaleDateString("en-us", {

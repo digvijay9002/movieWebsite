@@ -126,17 +126,17 @@ li {
   font-weight: 600;
   padding: 0.5rem rem;
 }
+
 .dropdown-menu,
 .dropdown-menu-tv {
-  background: #fff;
-  border-radius: 4px !important;
-  display: flex;
-  display: none;
-  flex-direction: column;
-  padding: 0.5rem 0;
   position: absolute;
-  top: 27px;
-  font-weight: normal;
+  display: flex;
+  flex-direction: column;
+  background: #ffffff;
+  border-radius: 4px !important;
+  top: 22px;
+  display: none;
+  padding: 0.5rem 0;
 }
 
 .header .right-navbar ul li div.translate-lan {
@@ -150,23 +150,11 @@ li {
   border-radius: 3px;
   padding: 3px 5px;
   color: #ffffff;
-  font-size: 0.9em;
+  font-size: 0.7em;
 }
 .header .right-navbar ul li div.translate-lan:hover {
   background: #ffffff;
   color: #000000;
-}
-
-.dropdown-menu,
-.dropdown-menu-tv {
-  position: absolute;
-  display: flex;
-  flex-direction: column;
-  background: #ffffff;
-  border-radius: 4px !important;
-  top: 27px;
-  display: none;
-  padding: 0.5rem 0;
 }
 
 a.nav-a {
@@ -182,6 +170,7 @@ a.nav-a {
 .dropdown-tvshow:hover .dropdown-menu-tv,
 .dropdown-people:hover .dropdown-people {
   display: block;
+  transition-delay: 1s;
 }
 
 .dropdown-movies,
@@ -189,6 +178,7 @@ a.nav-a {
 .dropdown-people {
   position: relative;
   display: inline-block;
+  transition-delay: 1s;
 }
 
 .dropdown-menu a:hover,

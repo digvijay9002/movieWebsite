@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Movie Details</title>
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"
+      integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65"
+      crossorigin="anonymous"
+    />
+
+    <link rel="stylesheet" href="./css/popularMovies.css" />
+    <link rel="icon" type="image/x-icon" href="./image/TMDB_logo.svg" />
+  </head>
+  <body>
+    <div id="root">
+      <header class="header" id="navbar">
+        <div class="left-navbar">
+          <a class="logo" href="/"
+            ><img src="./image/TMDB_logo.svg" alt="TMDB Logo"
+          /></a>
+          <ul class="navbar">
+            <li class="dropdown-movies">
+              <a>Movies</a>
+              <div class="dropdown-menu">
+                <a class="nav-a" href="./popularMovies.html">Popular</a
+                ><a class="nav-a" href="./nowPlaying.html">Now Playing</a
+                ><a class="nav-a" href="./upcomingM.html">Upcoming</a
+                ><a class="nav-a" href="./topRatedM.html">Top Rated</a>
+              </div>
+            </li>
+            <li class="dropdown-tvshow">
+              <a>TV Shows</a>
+              <div class="dropdown-menu-tv">
+                <a class="nav-a" href="/tv">Popular</a>
+                <a class="nav-a" href="/tv/airing-today">Airing Today</a>
+                <a class="nav-a" href="/tv/on-tv">On TV</a>
+                <a class="nav-a" href="/tv/top-rated">Top Rated</a>
+              </div>
+            </li>
+            <li class="dropdown-movies">
+              <a>People</a>
+              <div class="dropdown-menu">
+                <a class="nav-a" href="/people/popularPeople">Popular People</a>
+              </div>
+            </li>
+            <li class="dropdown-movies">
+              <a>More</a>
+              <div class="dropdown-menu">
+                <a class="nav-a" href="/more/Discussion">Discussion</a>
+                <a class="nav-a" href="/more/Leaderboard">Leaderboard</a>
+                <a class="nav-a" href="/more/Support">Support</a>
+                <a class="nav-a" href="/more/API">API</a>
+              </div>
+            </li>
+          </ul>
+        </div>
+        <div class="right-navbar">
+          <ul class="">
+            <li class="add-Icon">
+              <a href="#"><img src="./image/plus.svg" alt="Add Icon" /></a>
+            </li>
+            <li><div class="translate-lan">EN</div></li>
+
+            <li class="add-Icon">
+              <a href="#"
+                ><img
+                  src="./image/notification icon.svg"
+                  alt="Add Icon"
+                  style="filter: invert()"
+              /></a>
+            </li>
+            <li><a href="#">Login</a></li>
+
+            <li>
+              <a href="#"
+                ><img src="./image/search icon.svg"" alt="Search Icon"
+                class="search-icon" /></a
+              >
+            </li>
+          </ul>
+        </div>
+      </header>
+
+      <div class="container">
+        <div class="infinite-scroll-component__outerdiv">
+          <div
+            class="infinite-scroll-component"
+            style="height: auto; overflow: auto"
+          >
+            <div class="movies-div">
+              <div class="title"><h2>Popular Movies</h2></div>
+              <div class="content-wrapper">
+                <div class="search-movies-div">
+                  <div class="sort-div border-color-shadow">
+                    <div class="name">
+                      <h2>Sort</h2>
+                      <img
+                        src="./image/arrow_right.svg"
+                        alt="chevron image"
+                        class="closed"
+                      />
+                    </div>
+                    <!-- <div class="more-info-div">
+                      <h3>Sort Results By</h3>
+                      <div class="select-style css-b62m3t-container">
+                        <span
+                          id="react-select-2-live-region"
+                          class="css-7pg0cj-a11yText"
+                        ></span
+                        ><span
+                          aria-live="polite"
+                          aria-atomic="false"
+                          aria-relevant="additions text"
+                          class="css-7pg0cj-a11yText"
+                        ></span>
+                        <div class="css-13cymwt-control">
+                          <div class="css-hlgwow">
+                            <div
+                              class="css-1jqq78o-placeholder"
+                              id="react-select-2-placeholder"
+                            >
+                              Select...
+                            </div>
+                            <input
+                              id="react-select-2-input"
+                              tabindex="0"
+                              inputmode="none"
+                              aria-autocomplete="list"
+                              aria-expanded="false"
+                              aria-haspopup="true"
+                              role="combobox"
+                              aria-readonly="true"
+                              aria-describedby="react-select-2-placeholder"
+                              class="css-1hac4vs-dummyInput"
+                              value=""
+                            />
+                          </div>
+                          <div class="css-1wy0on6">
+                            <span class="css-1u9des2-indicatorSeparator"></span>
+                            <div
+                              class="css-1xc3v61-indicatorContainer"
+                              aria-hidden="true"
+                            >
+                              <svg
+                                height="20"
+                                width="20"
+                                viewBox="0 0 20 20"
+                                aria-hidden="true"
+                                focusable="false"
+                                class="css-8mmkcg"
+                              >
+                                <path
+                                  d="M4.516 7.548c0.436-0.446 1.043-0.481 1.576 0l3.908 3.747 3.908-3.747c0.533-0.481 1.141-0.446 1.574 0 0.436 0.445 0.408 1.197 0 1.615-0.406 0.418-4.695 4.502-4.695 4.502-0.217 0.223-0.502 0.335-0.787 0.335s-0.57-0.112-0.789-0.335c0 0-4.287-4.084-4.695-4.502s-0.436-1.17 0-1.615z"
+                                ></path>
+                              </svg>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div> -->
+                  </div>
+                  <div class="filter-div border-color-shadow mt">
+                    <div class="name">
+                      <h2>Filters</h2>
+                      <img src="./image/arrow_right.svg"" alt="chevron image"
+                      class="closed" />
+                    </div>
+                  </div>
+                  <div class="where-to-watch-div border-color-shadow mt">
+                    <div class="name">
+                      <h2>Where To Watch</h2>
+                      <img
+                        src="./image/arrow_right.svg"
+                        alt="chevron image"
+                        class="closed"
+                      />
+                    </div>
+                  </div>
+                  <div class="search-div"></div>
+                </div>
+                <div>
+                  <div class="movies-list-div" id="popular-movie"></div>
+                  <div class="load-more-div" id="loadMorebtn">
+                    <button class="load-btn">Load More</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="footer" id="footer">
+        <div class="logo-div mr">
+          <img
+            src="./image/footer_logo.svg"
+            alt="TMDB Logo"
+            class="tmdb-footer-logo"
+          /><a href="#">JOIN THE COMMUNITY</a>
+        </div>
+        <div class="info-div mr">
+          <h3>THE BASICS</h3>
+          <ul>
+            <li><a href="#">About TMDB</a></li>
+            <li><a href="#">Contact Us</a></li>
+            <li><a href="#">Support Forums</a></li>
+            <li><a href="#">API</a></li>
+            <li><a href="#">System Status</a></li>
+          </ul>
+        </div>
+        <div class="info-div mr">
+          <h3>GET INVOLVED</h3>
+          <ul>
+            <li><a href="#">Contribution Bible</a></li>
+            <li><a href="#">Add New Movie</a></li>
+            <li><a href="#">Add New TV Show</a></li>
+          </ul>
+        </div>
+        <div class="info-div mr">
+          <h3>Community</h3>
+          <ul>
+            <li><a href="#">Guidelines</a></li>
+            <li><a href="#">Discussions</a></li>
+            <li><a href="#">Leaderboard</a></li>
+            <li><a href="#">Twitter</a></li>
+          </ul>
+        </div>
+        <div class="info-div">
+          <h3>LEGAL</h3>
+          <ul>
+            <li><a href="#">Terms of Use</a></li>
+            <li><a href="#">API Terms of Use</a></li>
+            <li><a href="#">Privacy Policy</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <script defer="defer" src="./js/popularMovies.js"></script>
+  </body>
+</html>

@@ -491,8 +491,11 @@ fetch(
   
         <div class="meta">
           <div class="release-date">
+          <div>
             <img src="./image/rdate.svg" alt="date Icon" class="date-img">
-            <span id="rMovieDate">2017-10-27</span>
+            <span id="rMovieDate">${
+              recommendations[index].first_air_date
+            }</span></div>
             <div class="action-img false">
               <img src= "./image/rstar.svg" alt="fav Icon" class="black-color">
               <img src="./image/rBookmark.svg" alt="Watch List Icon" class="black-color">
