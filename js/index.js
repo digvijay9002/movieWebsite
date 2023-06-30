@@ -265,3 +265,54 @@ function decideType(mediaType, id) {
     return "movie";
   }
 }
+
+function fetchAPI() {
+  const options = {
+    method: "GET",
+    headers: {
+      accept: "application/json",
+      Authorization:
+        "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIwNTNiZjc0NzgxODVjNDk1NTZhZWVjOTliZmM0YmVkMiIsInN1YiI6IjY0ODE2ZjY2ZTI3MjYwMDEwNzIwYTVmNSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.fFzsWuDE0cTML6ULHicf1SOiGoHqCemuEAXERkhk_WE",
+    },
+  };
+
+  fetch("https://api.themoviedb.org/3/authentication/token/new", options)
+    .then((response) => response.json())
+    .then((response) => {
+      var requestToken = response.request_token;
+      console.log(response);
+      console.log(requestToken);
+
+      window.location.replace(
+        `https://www.themoviedb.org/authenticate/${requestToken}?redirect_to=https://moviewebsite-8c102.web.app/`
+      );
+
+      document.getElementById("btn-allow_authentication").click();
+
+      const options = {
+        method: "POST",
+        headers: {
+          accept: "application/json",
+          "content-type": "application/json",
+          Authorization:
+            "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIwNTNiZjc0NzgxODVjNDk1NTZhZWVjOTliZmM0YmVkMiIsInN1YiI6IjY0ODE2ZjY2ZTI3MjYwMDEwNzIwYTVmNSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.fFzsWuDE0cTML6ULHicf1SOiGoHqCemuEAXERkhk_WE",
+        },
+        body: JSON.stringify({ request_token: `${requestToken}` }),
+      };
+
+      fetch(
+        "https://api.themoviedb.org/3/authentication/session/new?api_key=053bf7478185c49556aeec99bfc4bed2",
+        options
+      )
+        .then((response) => {
+          response.json();
+        })
+
+        .then((response) => {
+          console.log("HELOOOOOOOOOOOOOOOOOOOOOOOOOooo");
+          console.log("session_id", response);
+        })
+        .catch((err) => console.error(err));
+    })
+    .catch((err) => console.error(err));
+}
