@@ -22,7 +22,7 @@ const fetchMovies = () => {
     .then((response) => response.json())
     .then((popularMovies) => {
       let results = popularMovies.results;
-
+      
       console.log(results);
       let posters = document.getElementById("popular-movie");
 

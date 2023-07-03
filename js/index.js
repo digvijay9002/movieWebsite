@@ -1,6 +1,42 @@
 let popularOnTv = document.getElementById("popularOnTv");
 let inTheaters = document.getElementById("inTheaters");
 
+const getSessionId = () => {
+  const approved = new URLSearchParams(window.location.href).get("approved");
+  const requestToken = new URLSearchParams(window.location.href).get(
+    "request_token"
+  );
+  console.log("getSessionId", approved);
+  if (approved) {
+    const options = {
+      method: "POST",
+      headers: {
+        accept: "application/json",
+        "content-type": "application/json",
+        Authorization:
+          "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIwNTNiZjc0NzgxODVjNDk1NTZhZWVjOTliZmM0YmVkMiIsInN1YiI6IjY0ODE2ZjY2ZTI3MjYwMDEwNzIwYTVmNSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.fFzsWuDE0cTML6ULHicf1SOiGoHqCemuEAXERkhk_WE",
+      },
+      body: JSON.stringify({ request_token: `${requestToken}` }),
+    };
+
+    fetch(
+      "https://api.themoviedb.org/3/authentication/session/new?api_key=053bf7478185c49556aeec99bfc4bed2",
+      options
+    )
+      .then((response) => {
+        response.json();
+      })
+
+      .then((response) => {
+        console.log("HELOOOOOOOOOOOOOOOOOOOOOOOOOooo");
+        console.log("session_id", response);
+      })
+      .catch((err) => console.error(err));
+  }
+};
+
+getSessionId();
+
 popularOnTv.addEventListener("click", () => {
   popularNow(
     "https://api.themoviedb.org/3/tv/airing_today?language=en-US&page=1'",
@@ -284,35 +320,10 @@ function fetchAPI() {
       console.log(requestToken);
 
       window.location.replace(
-        `https://www.themoviedb.org/authenticate/${requestToken}?redirect_to=https://moviewebsite-8c102.web.app/`
+        `https://www.themoviedb.org/authenticate/${requestToken}`
       );
 
-      document.getElementById("btn-allow_authentication").click();
-
-      const options = {
-        method: "POST",
-        headers: {
-          accept: "application/json",
-          "content-type": "application/json",
-          Authorization:
-            "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIwNTNiZjc0NzgxODVjNDk1NTZhZWVjOTliZmM0YmVkMiIsInN1YiI6IjY0ODE2ZjY2ZTI3MjYwMDEwNzIwYTVmNSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.fFzsWuDE0cTML6ULHicf1SOiGoHqCemuEAXERkhk_WE",
-        },
-        body: JSON.stringify({ request_token: `${requestToken}` }),
-      };
-
-      fetch(
-        "https://api.themoviedb.org/3/authentication/session/new?api_key=053bf7478185c49556aeec99bfc4bed2",
-        options
-      )
-        .then((response) => {
-          response.json();
-        })
-
-        .then((response) => {
-          console.log("HELOOOOOOOOOOOOOOOOOOOOOOOOOooo");
-          console.log("session_id", response);
-        })
-        .catch((err) => console.error(err));
+      // document.getElementById("btn-allow_authentication").click();
     })
     .catch((err) => console.error(err));
 }
